@@ -5,17 +5,11 @@ use App\Models\ProductModel;
 
 class Product extends Controller
 {
-    // Buat variabel untuk menyimpan data model
-    protected $ProductModel;
-    // Buat variabel untuk menampung request
-    protected $request;
 
     public function __construct() {
 
-        // Mendeklarasikan class ProductModel menggunakan $this->ProductModel
-        $this->ProductModel = new ProductModel();
-        // Mendeklarasikan service request menggunakan $this->request
-        $this->request = \Config\Services::request();
+        // Mendeklarasikan class ProductModel menggunakan $this->product
+        $this->product = new ProductModel();
         /* Catatan:
         Apa yang ada di dalam function construct ini nantinya bisa digunakan
         pada function di dalam class Product 
@@ -24,10 +18,8 @@ class Product extends Controller
 
 	public function index()
 	{
-        // Memanggil function get_product() di dalam ProductModel dan menampungnya di variabel array product
-        $data['product'] = $this->ProductModel->get_product();
-        // Mengirim data ke dalam view
-        return view('product/index', $data);
+        $data['product'] = $this->product->getProduct();
+        echo view('product/index', $data);
     }
     
     public function create()
@@ -51,7 +43,7 @@ class Product extends Controller
         Membuat variabel simpan yang isinya merupakan memanggil function 
         insert_product dan membawa parameter data 
         */
-        $simpan = $this->ProductModel->insert_product($data);
+        $simpan = $this->product->insert_product($data);
 
         // Jika simpan berhasil, maka ...
         if($simpan)
@@ -64,9 +56,9 @@ class Product extends Controller
     }
 
     public function edit($id)
-	{
-        // Memanggil function edit_product() dengan parameter $id di dalam ProductModel dan menampungnya di variabel array product
-        $data['product'] = $this->ProductModel->edit_product($id);
+    {
+        // Memanggil function getProduct($id) dengan parameter $id di dalam ProductModel dan menampungnya di variabel array product
+        $data['product'] = $this->product->getProduct($id);
         // Mengirim data ke dalam view
         return view('product/edit', $data);
     }
@@ -87,7 +79,7 @@ class Product extends Controller
         Membuat variabel ubah yang isinya merupakan memanggil function 
         update_product dan membawa parameter data beserta id
         */
-        $ubah = $this->ProductModel->update_product($data, $id);
+        $ubah = $this->product->update_product($data, $id);
         
         // Jika berhasil melakukan ubah
         if($ubah)
@@ -102,12 +94,12 @@ class Product extends Controller
     public function delete($id)
     {
         // Memanggil function delete_product() dengan parameter $id di dalam ProductModel dan menampungnya di variabel hapus
-        $hapus = $this->ProductModel->delete_product($id);
+        $hapus = $this->product->delete_product($id);
 
         // Jika berhasil melakukan hapus
         if($hapus)
         {
-             // Deklarasikan session flashdata dengan tipe warning
+                // Deklarasikan session flashdata dengan tipe warning
             session()->setFlashdata('warning', 'Deleted product successfully');
             // Redirect ke halaman product
             return redirect()->to(base_url('product'));

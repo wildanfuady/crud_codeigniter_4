@@ -103,7 +103,7 @@
 				</svg>
 			</div>
 
-			<h1>Welcome to CodeIgniter <?php echo $kata; ?></h1>
+			<h1>Welcome to CodeIgniter</h1>
 
 			<p class="version">version <?= CodeIgniter\CodeIgniter::CI_VERSION ?></p>
 
